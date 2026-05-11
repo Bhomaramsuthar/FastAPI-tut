@@ -55,8 +55,8 @@
     "age": 22,
     "gender": "male",
     "height": 1.75,
-    "weight": 68.0,
-    "bmi": 22.2,
+    "weight": 70.0,
+    "bmi": 22.86,
     "verdict": "Normal"
   },
   "P012": {
@@ -65,8 +65,8 @@
     "age": 20,
     "gender": "male",
     "height": 1.5,
-    "weight": 70.0,
-    "bmi": 31.11,
+    "weight": 75.0,
+    "bmi": 33.33,
     "verdict": "Obese"
   }
 }
