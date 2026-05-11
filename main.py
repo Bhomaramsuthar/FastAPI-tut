@@ -68,7 +68,7 @@ def greet():
 # Get about the page
 @app.get("/about")
 def about():
-    return{'message':'fullt funtionable api (patient)'}
+    return{'message':'fully funtionable api (patient)'}
 
 # Get all data
 @app.get("/view")
@@ -144,3 +144,17 @@ def update_patient(patient_id:str,patient_update: PatientUpdate):
     save_data(data)
 
     return JSONResponse(status_code=200,content={'message':'Patient updated'})
+
+@app.delete('/delete/{patient_id}')
+
+def delete_patient(patient_id:str):
+    data=load_data()
+
+    if patient_id not in data:
+        raise HTTPException(status_code=404,detail='patient not found')
+    
+    del data[patient_id]
+
+    save_data(data)
+
+    return JSONResponse(status_code=200,content={'message':'Deleted patient successfully'})
