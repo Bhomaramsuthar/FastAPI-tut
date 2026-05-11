@@ -4,9 +4,10 @@ from typing import Annotated,Literal,computed_field,Optional
 from pydantic import BaseModel,Field
 import json
 
-
+#app
 app = FastAPI()
 
+# pydantic new class
 class Patient(BaseModel):
 
     id:Annotated[str,Field(...,description='ID of the patient',example=['P001'])]
@@ -36,6 +37,7 @@ class Patient(BaseModel):
         else:
             return 'Obese'
     
+# pydantic update class
 class PatientUpdate(BaseModel):
     name:Annotated[Optional[str],Field(default=None)]
     city:Annotated[Optional[str],Field(default=None)]
@@ -43,6 +45,8 @@ class PatientUpdate(BaseModel):
     gender:Annotated[Optional[Literal['male','female']],Field(default=None)]
     height:Annotated[Optional[float],Field(default=None,gt=0)]
     weight:Annotated[Optional[float],Field(default=None,gt=0)]
+
+# helper functions
 
 def load_data():
     with open("patients.json",'r') as f:
@@ -54,19 +58,25 @@ def save_data(data):
     with open("patients.json",'w') as f:
         json.dump(data, f, indent=2)
 
+# ---- API routes ----
+
+# Get home 
 @app.get("/")
 def greet():
     return {'message':'Patient Management'}
 
+# Get about the page
 @app.get("/about")
 def about():
     return{'message':'fullt funtionable api (patient)'}
 
+# Get all data
 @app.get("/view")
 def view():
     data = load_data()
     return data
 
+# Get  patient by id
 @app.get('/patient/{patient_id}')
 def view_patient(patient_id: str= Path(...,description='ID of the patient in the DB',example='P001')):
     data = load_data()
@@ -74,6 +84,7 @@ def view_patient(patient_id: str= Path(...,description='ID of the patient in the
         return data[patient_id]
     raise HTTPException(sattus_code=404, detail='Patient not found')
 
+# Get sorted data
 @app.get('/sort')
 def sort_patients(sort_by:str = Query(..., description='Sort on the bosis of the height,weight or BMI'),order: str = Query('asc',description='sort in asc or desc order')):
     
@@ -92,6 +103,7 @@ def sort_patients(sort_by:str = Query(..., description='Sort on the bosis of the
 
     return sorted_data
 
+# Post data
 @app.post('/create')
 def create_patient(patient: Patient):
     data=load_data()
