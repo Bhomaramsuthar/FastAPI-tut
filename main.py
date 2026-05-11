@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Path, HTTPException,Query
 from fastapi.responses import JSONResponse
-from typing import Annotated,Literal,computed_field,Optional
-from pydantic import BaseModel,Field
+from typing import Annotated,Literal,Optional
+from pydantic import BaseModel,Field,computed_field
 import json
 
 #app
@@ -21,7 +21,7 @@ class Patient(BaseModel):
     @computed_field
     @property
     def bmi(self)->float:
-        bmi=(self.weight/(self.height**2),2)
+        bmi=round(self.weight/(self.height**2),2)
         return bmi
     
     @computed_field
@@ -82,7 +82,7 @@ def view_patient(patient_id: str= Path(...,description='ID of the patient in the
     data = load_data()
     if patient_id in data:
         return data[patient_id]
-    raise HTTPException(sattus_code=404, detail='Patient not found')
+    raise HTTPException(status_code=404, detail='Patient not found')
 
 # Get sorted data
 @app.get('/sort')
